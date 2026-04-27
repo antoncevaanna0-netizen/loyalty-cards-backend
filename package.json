@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
+    "postinstall": "node createAdmin.js"
   },
   "keywords": [],
   "author": "",

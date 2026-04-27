@@ -60,8 +60,7 @@ async function verifyCaptcha(token) {
 
 // Шаг 1: Запрос кода подтверждения
 router.post('/request-code', [
-    body('contact').notEmpty().withMessage('Введите телефон или email'),
-    body('captchaToken').notEmpty().withMessage('Подтвердите, что вы не робот'),
+    body('contact').notEmpty().withMessage('Введите телефон или email')
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -71,10 +70,7 @@ router.post('/request-code', [
     const { contact, captchaToken } = req.body;
 
     // Проверяем CAPTCHA
-    const isCaptchaValid = await verifyCaptcha(captchaToken);
-    if (!isCaptchaValid) {
-        return res.status(400).json({ error: 'CAPTCHA не пройдена. Попробуйте снова.' });
-    }
+   
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     
