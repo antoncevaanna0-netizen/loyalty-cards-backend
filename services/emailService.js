@@ -1,18 +1,10 @@
-// backend/services/emailService.js
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function sendVerificationEmail(toEmail, code) {
-    const mailOptions = {
-        from: `"Карты лояльности" <${process.env.EMAIL_USER}>`,
+    const msg = {
         to: toEmail,
+        from: process.env.EMAIL_USER,
         subject: 'Код подтверждения регистрации',
         html: `
             <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
@@ -26,13 +18,12 @@ async function sendVerificationEmail(toEmail, code) {
                         <span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #667eea;">${code}</span>
                     </div>
                     <p style="color: #999; font-size: 14px;">Код действителен в течение 10 минут.</p>
-                    <p style="color: #999; font-size: 14px;">Если вы не запрашивали код, просто проигнорируйте это письмо.</p>
                 </div>
             </div>
         `
     };
 
-    await transporter.sendMail(mailOptions);
+    await sgMail.send(msg);
 }
 
 module.exports = { sendVerificationEmail };
